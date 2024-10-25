@@ -7,7 +7,93 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
     <link rel="stylesheet" href="~/ToDoList.styles.css" asp-append-version="true"/>
+
+    <style>
+        .progres{
+            display:none;
+        }
+
+        .login {
+            display: none; /* Изначально скрываем форму */
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1001; /* Поверх затемненного фона */
+            width: 400px; /* Ширина окна */
+            border-radius: 20px;
+            padding: 20px;
+        }
+
+        .formLog {
+            display: blockl;
+            box-sizing: border-box;
+            padding: 40px;
+            width: 100%;
+            height: 100%;
+            flex-direction: column;
+            display: flex;
+            gap: 5px;
+        }
+
+        .h1Log {
+            text-transform:uppercase;
+            font-weight: normal;
+            font-size: 24px;
+            text-shadow: 0px 0px 2px rgba(0,0,0,0.5);
+            margin-bottom: 60px;
+            
+        }
+
+        .labelLog {
+            color: black;
+            text-transform: uppercase;
+            font-size: 10px;
+            letter-spacing: 2px;
+            padding-left: 10px;
+        }
+
+        .inputLog {
+            background: rgba(255,255,255,0.3);
+            height: 40px;
+            line-height: 40px;
+            border-radius: 20px;
+            padding: 0px 20px;
+            border: 1px solid black;
+            margin-bottom: 20px;
+            color: black;
+        }
+
+        .buttonLog {
+            background: rgba(45,126,231);
+            height: 40px;
+            line-height: 40px;
+            border-radius: 20px;
+            border: none;
+            margin: 10px 0px;
+            box-shadow: 0px 0px 5px rgba(0,0,0,0.3);
+            color: white;
+        }
+
+        .modal-overlay {
+            display: none; /* Изначально скрыто */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Полупрозрачный черный фон */
+            z-index: 1000; /* Поверх всего остального */
+        }
+
+        .lastdone{
+            display:none;
+        }
+     </style>
 </head>
+
 <body class="bg-light">
 <header>
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
@@ -20,8 +106,17 @@
             <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                 <ul class="navbar-nav flex-grow-1">
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Task" asp-action="Index">Home</a>
+                            <a class="nav-link text-dark btn" onclick="showConteinerForm(); closeProgressForm(); closeLastDoneForm()">Create</a>
                     </li>
+                    <li class="nav-item">
+                            <a class="nav-link text-dark btn" onclick="closeConteinerForm(); showProgressForm(); closeLastDoneForm()">Progress</a>
+                    </li>
+                    <li class="nav-item">
+                            <a class="nav-link text-dark btn" onclick="closeConteinerForm(); closeProgressForm(); showLastDoneForm()">Last done</a>
+                    </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark btn" onclick="showLoginForm(); closeProgressForm(); closeLastDoneForm()">Profile</a>
+                        </li>
                 </ul>
             </div>
         </div>
@@ -53,9 +148,92 @@
     </div>
 </div>
 
+<div class="modal-overlay" onclick="closeLoginForm()"></div>
+    <div class="login">
+        <form class="formLog">
+            <h1 class="h1Log">Log in</h1>
+            <label class="labelLog">Username</label>
+            <input class="inputLog" type="text" />
+            <label class="labelLog">Password</label>
+            <input class="inputLog" type="text" />
+            <button class="buttonLog">Submit</button>
+            <button type="button" onclick="closeLoginForm()" class="buttonLog">Закрыть</button>
+        </form>
+    </div>
+
+    <div class="progres">
+        крч тут бля надо как то вывести то что будет в бд
+    </div>
+
+    <div class="lastdone">
+        крч тут бля надо как то вывести то что будет последнее выполненное за неделю там допустим
+    </div>
+
+
+
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="~/js/site.js" asp-append-version="true"></script>
 @await RenderSectionAsync("Scripts", required: false)
+
+    <script>
+        function showLoginForm() {
+            var modalOverlay = document.querySelector('.modal-overlay');
+            var loginForm = document.querySelector('.login');
+            modalOverlay.style.display = 'block'; // Показываем затемнение
+            loginForm.style.display = 'block'; // Показываем форму
+        }
+
+        function closeLoginForm() {
+            var modalOverlay = document.querySelector('.modal-overlay');
+            var loginForm = document.querySelector('.login');
+            modalOverlay.style.display = 'none'; // Скрываем затемнение
+            loginForm.style.display = 'none'; // Скрываем форму
+            showConteinerForm();
+        }
+    </script>
+
+    <script>
+        function showConteinerForm() {
+            var modalOverlay = document.querySelector('.modal-overlay');
+            var loginForm = document.querySelector('.container');
+            loginForm.style.display = 'block'; // Показываем форму
+        }
+
+        function closeConteinerForm() {
+            var modalOverlay = document.querySelector('.modal-overlay');
+            var loginForm = document.querySelector('.container');
+            loginForm.style.display = 'none'; // Скрываем форму
+        }
+    </script>
+
+    <script>
+        function showProgressForm() {
+            var modalOverlay = document.querySelector('.modal-overlay');
+            var loginForm = document.querySelector('.progres');
+            loginForm.style.display = 'block'; // Показываем форму
+        }
+
+        function closeProgressForm() {
+            var modalOverlay = document.querySelector('.modal-overlay');
+            var loginForm = document.querySelector('.progres');
+            loginForm.style.display = 'none'; // Скрываем форму
+        }
+    </script>
+
+    <script>
+        function showLastDoneForm() {
+            var modalOverlay = document.querySelector('.modal-overlay');
+            var loginForm = document.querySelector('.lastdone');
+            loginForm.style.display = 'block'; // Показываем форму
+        }
+
+        function closeLastDoneForm() {
+            var modalOverlay = document.querySelector('.modal-overlay');
+            var loginForm = document.querySelector('.lastdone');
+            loginForm.style.display = 'none'; // Скрываем форму
+        }
+    </script>
+
 </body>
 </html>
