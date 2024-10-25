@@ -1,0 +1,31 @@
+﻿@model IEnumerable<ToDoList.Domain.ViewModels.Task.CreateTaskViewModel>
+
+@{
+    ViewData["Title"] = "Progress";
+}
+
+<h2>Progress</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Название</th>
+            <th>Описание</th>
+            <th>Статус</th>
+            <th>Дата создания</th>
+            <th>Приоритет</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var task in Model)
+        {
+            <tr>
+                <td>@task.Name</td>
+                <td>@task.Description</td>
+                <td>@(task.IsDone ? "Выполнено" : "В процессе")</td>
+                <td>@task.Created.ToString("dd.MM.yyyy")</td>
+                <td>@task.Priority</td>
+            </tr>
+        }
+    </tbody>
+</table>

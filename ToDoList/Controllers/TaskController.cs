@@ -18,6 +18,13 @@ public class TaskController : Controller
         return View();
     }
 
+    public async Task<IActionResult> Progress()
+    {
+        var tasks = await _taskService.GetAllTasks();
+        return View(tasks); // Передаем задачи в представление
+    }
+
+
     [HttpPost]
     public async Task<IActionResult> Create(CreateTaskViewModel model)
     {

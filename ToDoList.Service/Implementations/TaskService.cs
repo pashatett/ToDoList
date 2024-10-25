@@ -66,4 +66,20 @@ public class TaskService : ITaskService
             };
         }
     }
+
+    public async Task<IEnumerable<CreateTaskViewModel>> GetAllTasks()
+    {
+        var tasks = await _taskRepository.GetAll().ToListAsync(); // Получаем все задачи из базы данных
+
+        return tasks.Select(task => new CreateTaskViewModel
+        {
+            Id = (int)task.Id,
+            Name = task.Name,
+            Description = task.Description,
+            IsDone = task.IsDone,
+            Created = task.Created,
+            Priority = task.Priority
+        }).ToList();
+    }
+
 }
