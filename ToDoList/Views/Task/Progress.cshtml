@@ -17,14 +17,23 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var task in Model)
+        @if (Model != null && Model.Any())
+        {
+            foreach (var task in Model)
+            {
+                <tr>
+                    <td>@task.Name</td>
+                    <td>@task.Description</td>
+                    <td>@(task.IsDone ? "Completed" : "In Progress")</td>
+                    <td>@task.Created.ToString("dd.MM.yyyy")</td>
+                    <td>@task.Priority</td>
+                </tr>
+            }
+        }
+        else
         {
             <tr>
-                <td>@task.Name</td>
-                <td>@task.Description</td>
-                <td>@(task.IsDone ? "Выполнено" : "В процессе")</td>
-                <td>@task.Created.ToString("dd.MM.yyyy")</td>
-                <td>@task.Priority</td>
+                <td colspan="5" class="text-center">No tasks found.</td>
             </tr>
         }
     </tbody>
