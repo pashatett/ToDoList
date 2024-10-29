@@ -22,7 +22,7 @@
 {
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        $('#createTask').on('click', function (e){
+        $('#createTask').on('click', function (e) {
             e.preventDefault();
             $.ajax({
                 type: 'POST',
@@ -37,14 +37,45 @@
                     })
                 },
                 error: function (response) {
-                     Swal.fire({
+                    Swal.fire({
                         title: 'Информация',
                         text: response.responseJSON.description,
                         icon: 'error',
                         confirmButtonText: 'Окей'
-                     })
+                    })
                 }
-            })
+            });
+        });
+
+        // Обработчик нажатия на кнопку "Завершить"
+        $('.mark-done').on('click', function () {
+            var taskId = $(this).data('id'); // Получаем ID задачи
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("MarkAsDone", "Task")', // Убедись, что этот метод существует в контроллере
+                data: { id: taskId }, // Передаем ID задачи
+                success: function (response) {
+                    // Обновляем статус в таблице
+                    var row = $(this).closest('tr'); // Находим строку
+                    row.find('.status-cell').text('Completed'); // Обновляем статус
+                    Swal.fire({
+                        title: 'Успех',
+                        text: response.description,
+                        icon: 'success',
+                        confirmButtonText: 'Окей'
+                    });
+                }.bind(this), // Привязка контекста
+                error: function (response) {
+                    Swal.fire({
+                        title: 'Ошибка',
+                        text: response.responseJSON.description,
+                        icon: 'error',
+                        confirmButtonText: 'Окей'
+                    });
+                }
+            });
         });
     </script>
 }
+
+

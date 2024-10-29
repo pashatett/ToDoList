@@ -14,6 +14,7 @@
             <th>Статус</th>
             <th>Дата создания</th>
             <th>Приоритет</th>
+            <th>Действия</th> <!-- Добавьте этот столбец -->
         </tr>
     </thead>
     <tbody>
@@ -21,20 +22,59 @@
         {
             foreach (var task in Model)
             {
-                <tr>
+                <tr data-id="@task.Id">
+                    <!-- Сохраняем ID задачи в строке -->
                     <td>@task.Name</td>
                     <td>@task.Description</td>
-                    <td>@(task.IsDone ? "Completed" : "In Progress")</td>
+                    <td class="status">@(@task.IsDone ? "Completed" : "In Progress")</td>
                     <td>@task.Created.ToString("dd.MM.yyyy")</td>
                     <td>@task.Priority</td>
+                    <td>
+                        <button class="btn btn-success mark-complete">Завершить</button> <!-- Кнопка завершения задачи -->
+                    </td>
                 </tr>
             }
         }
         else
         {
             <tr>
-                <td colspan="5" class="text-center">No tasks found.</td>
+                <td colspan="6" class="text-center">No tasks found.</td>
             </tr>
         }
     </tbody>
 </table>
+
+@section Scripts
+{
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        $('.mark-complete').on('click', function (e) {
+            e.preventDefault();
+            var row = $(this).closest('tr');
+            var taskId = row.data('id'); // Получаем ID задачи из строки
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("MarkAsDone", "Task")', // URL действия для завершения задачи
+                data: { id: taskId }, // Отправляем ID задачи
+                success: function (response) {
+                    Swal.fire({
+                        title: 'Информация',
+                        text: response.description,
+                        icon: 'success',
+                        confirmButtonText: 'Окей'
+                    });
+                    // Обновляем статус задачи в таблице
+                    row.find('.status').text('Completed');
+                },
+                error: function (response) {
+                    Swal.fire({
+                        title: 'Информация',
+                        text: response.responseJSON.description,
+                        icon: 'error',
+                        confirmButtonText: 'Окей'
+                    });
+                }
+            });
+        });
+    </script>
+}

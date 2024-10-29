@@ -8,5 +8,8 @@ public interface ITaskService
 {
     Task<IBaseResponse<TaskEntity>> Create(CreateTaskViewModel model);
     Task<IEnumerable<CreateTaskViewModel>> GetAllTasks();
+    Task<TaskEntity> GetTaskById(int id);
+    Task<TaskEntity> Update(TaskEntity task);
+
 
 }

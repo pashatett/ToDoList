@@ -35,4 +35,21 @@ public class TaskController : Controller
         }
         return BadRequest(new { description = response.Description });
     }
+
+    [HttpPost]
+    public async Task<IActionResult> MarkAsDone(int id)
+    {
+        var task = await _taskService.GetTaskById(id); // Предполагается, что метод существует
+        if (task == null)
+        {
+            return NotFound(new { description = "Задача не найдена" });
+        }
+
+        task.IsDone = true; // Обновляем статус задачи
+        await _taskService.Update(task); // Метод обновления задачи в сервисе
+
+        return Ok(new { description = "Задача завершена" });
+    }
+
+
 }

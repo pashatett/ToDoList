@@ -82,4 +82,15 @@ public class TaskService : ITaskService
         }).ToList();
     }
 
+    public async Task<TaskEntity> GetTaskById(int id)
+    {
+        return await _taskRepository.GetAll().FirstOrDefaultAsync(x => x.Id == id);
+    }
+
+    public async Task<TaskEntity> Update(TaskEntity task)
+    {
+        return await _taskRepository.Update(task);
+    }
+
+
 }
