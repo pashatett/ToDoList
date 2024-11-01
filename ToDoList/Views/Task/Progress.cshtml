@@ -30,7 +30,13 @@
                     <td>@task.Created.ToString("dd.MM.yyyy")</td>
                     <td>@task.Priority</td>
                     <td>
-                        <button class="btn btn-success mark-complete">Завершить</button> <!-- Кнопка завершения задачи -->
+                        @if (!@task.IsDone)
+                        //надо сделать чтобы оно обновлялось в реальном времени
+                        // тип я нажал на то что выполнено и кнопка нахуй сразу исчезает
+                        // скорее всего это как то через скрипт надо
+                        {
+                            <button class="btn btn-success mark-complete">Завершить</button> <!-- Кнопка завершения задачи -->
+                        }
                     </td>
                 </tr>
             }

@@ -115,13 +115,14 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark btn" onclick="showLoginForm(); closeProgressForm(); closeLastDoneForm()">Profile</a>
+                            
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
-
+    
     <div class="container">
         <div class="row">
             <div class="col-md-4 order-md-2 mb-4">
@@ -130,11 +131,10 @@
                     <span class="badge badge-secondary badge-pill text-muted" id="countOfCompletedTasks"></span>
                 </h4>
                 <ul class="list-group mb-3" id="completedListTasks"></ul>
-                <form>
-                    <div class="card col-md-12">
-                        <button type="submit" class="btn btn-secondary">Закончить день</button>
-                    </div>
-                </form>
+                <h4 class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="text-muted">Текущее время: <span id="currentDateTime"></span></span>
+                    <span class="badge badge-secondary badge-pill text-muted" id="countOfCompletedTasks"></span>
+                </h4>
                 <br />
                 <div class="form-group">
                     <label>Заметки для себя</label>
@@ -148,6 +148,7 @@
     </div>
 
     <div class="modal-overlay" onclick="closeLoginForm()"></div>
+
     <div class="login">
         <form class="formLog">
             <h1 class="h1Log">Log in</h1>
@@ -160,9 +161,19 @@
         </form>
     </div>
 
-
     <div class="lastdone">
         крч тут бля надо как то вывести то что будет последнее выполненное за неделю там допустим
+        сделать еще одну бд в которую будут заноситься все значения где значение = комплетед
+        а из  первой бд удалить
+    </div>
+
+    <div class="profile">
+        надо добавить бд с логинами профилями и все такое
+        если чел уже зарегался или вошел в акк то будет открываться профиль
+        хз зач он нужен 
+        еще надо подумать с базой
+        может для каждого профиля лучше будет свою базу создавать?
+        или это пиздец будет по памяти?
     </div>
 
 
@@ -174,7 +185,8 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 
-    <script>
+    
+    <script>//отображение входа поверх основного экрана
         function showLoginForm() {
             var modalOverlay = document.querySelector('.modal-overlay');
             var loginForm = document.querySelector('.login');
@@ -189,9 +201,10 @@
             loginForm.style.display = 'none'; // Скрываем форму
             showConteinerForm();
         }
+        
     </script>
-
-    <script>
+    
+    <script>//отображение контейнера в котором создается задача
         function showConteinerForm() {
             var modalOverlay = document.querySelector('.modal-overlay');
             var loginForm = document.querySelector('.container');
@@ -205,7 +218,7 @@
         }
     </script>
 
-    <script>
+    <script>//отображение задач которые нужно выполнить
         function showProgressForm() {
             var modalOverlay = document.querySelector('.modal-overlay');
             var loginForm = document.querySelector('.progres');
@@ -219,7 +232,7 @@
         }
     </script>
 
-    <script>
+    <script>//отображение выполненных за последнюю неделю(ну или же последние 50 там, подумать надо крч) задач
         function showLastDoneForm() {
             var modalOverlay = document.querySelector('.modal-overlay');
             var loginForm = document.querySelector('.lastdone');
@@ -231,6 +244,21 @@
             var loginForm = document.querySelector('.lastdone');
             loginForm.style.display = 'none'; // Скрываем форму
         }
+    </script>
+
+    <script>//отображение времени
+        function updateDateTime() {
+            const now = new Date();
+            // Форматирование даты и времени: dd.MM.yyyy HH:mm:ss
+            const formattedDateTime = now.toLocaleDateString('ru-RU') + ' ' + now.toLocaleTimeString('ru-RU');
+            document.getElementById('currentDateTime').innerText = formattedDateTime;
+        }
+
+        // Обновляем время каждую секунду
+        setInterval(updateDateTime, 1000);
+
+        // Обновим сразу после загрузки страницы
+        updateDateTime();
     </script>
 
 </body>
